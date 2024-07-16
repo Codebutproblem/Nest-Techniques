@@ -2,9 +2,11 @@ import { Global, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
-import { CACHE_MANAGER, CacheInterceptor, CacheModule } from '@nestjs/cache-manager';
+import { CacheInterceptor, CacheModule } from '@nestjs/cache-manager';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ScheduleModule } from '@nestjs/schedule';
+import { TaskModule } from './task/task.module';
 
 @Global()
 @Module({
@@ -20,7 +22,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         
       }),
       inject: [ConfigService],
-    }), UserModule],
+    }), 
+    ScheduleModule.forRoot(),
+    UserModule,
+    TaskModule],
   controllers: [AppController],
   providers: [
     {
