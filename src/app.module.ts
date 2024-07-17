@@ -10,6 +10,9 @@ import { TaskModule } from './task/task.module';
 import { BullModule } from '@nestjs/bullmq';
 import { MailModule } from './mail/mail.module';
 import { LoggerModule } from './logger/logger.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+import { PetModule } from './pet/pet.module';
+import { EventModule } from './event/event.module';
 
 @Global()
 @Module({
@@ -39,7 +42,10 @@ import { LoggerModule } from './logger/logger.module';
     UserModule,
     TaskModule,
     MailModule,
-    LoggerModule
+    LoggerModule,
+    EventEmitterModule.forRoot(),
+    PetModule,
+    EventModule
   ],
   controllers: [AppController],
   providers: [

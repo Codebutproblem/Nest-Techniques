@@ -23,7 +23,7 @@ export class MailConsumer extends WorkerHost {
                 subject: job.data.subject,
                 text: job.data.message,
             });
-            this.loggerService.log(`Mail sent to ${job.data.email}`);
+            
         } catch (error) {
             this.loggerService.error(`Error sending mail to ${job.data.email}`, error.stack);
         }
