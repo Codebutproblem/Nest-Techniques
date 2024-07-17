@@ -7,6 +7,8 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TaskModule } from './task/task.module';
+import { BullModule } from '@nestjs/bullmq';
+import { MailModule } from './mail/mail.module';
 
 @Global()
 @Module({
@@ -24,8 +26,18 @@ import { TaskModule } from './task/task.module';
       inject: [ConfigService],
     }), 
     ScheduleModule.forRoot(),
+    BullModule.forRootAsync({
+      useFactory: (configService: ConfigService) => ({
+        connection: {
+          host: configService.get<string>('REDIS_HOST'),
+          port: configService.get<number>('REDIS_PORT'),
+        },
+      }),
+      inject: [ConfigService],
+    }),
     UserModule,
-    TaskModule],
+    TaskModule,
+    MailModule],
   controllers: [AppController],
   providers: [
     {

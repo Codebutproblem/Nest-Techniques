@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import { UserDto } from './dto/user.dto';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class UserService {
@@ -18,5 +19,12 @@ export class UserService {
                 resolve(users);
             }, 1500);
         });
+    }
+
+    async findOne(id: number): Promise<UserDto> {
+        const data = fs.readFileSync(this.filePath, 'utf8');
+        const users = JSON.parse(data);
+        const user = users.find((user: UserDto) => user.id === id);
+        return plainToInstance(UserDto, user);
     }
 }
