@@ -9,6 +9,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { TaskModule } from './task/task.module';
 import { BullModule } from '@nestjs/bullmq';
 import { MailModule } from './mail/mail.module';
+import { LoggerModule } from './logger/logger.module';
 
 @Global()
 @Module({
@@ -37,7 +38,9 @@ import { MailModule } from './mail/mail.module';
     }),
     UserModule,
     TaskModule,
-    MailModule],
+    MailModule,
+    LoggerModule
+  ],
   controllers: [AppController],
   providers: [
     {

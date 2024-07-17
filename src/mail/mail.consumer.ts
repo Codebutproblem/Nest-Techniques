@@ -2,14 +2,17 @@ import { MailerService } from "@nestjs-modules/mailer";
 import { OnQueueEvent, Processor, WorkerHost } from "@nestjs/bullmq";
 import { ConfigService } from "@nestjs/config";
 import { Job } from "bullmq";
+import { LoggerService } from "src/logger/logger.service";
 @Processor('mail-queue')
 export class MailConsumer extends WorkerHost {
 
     constructor(
         private readonly mailService: MailerService,
-        private readonly configService: ConfigService
+        private readonly configService: ConfigService,
+        private readonly loggerService: LoggerService
     ) {
         super();
+        loggerService.setContext(MailConsumer.name);
     }
 
     async process(job: Job<any, any, string>) {
@@ -20,9 +23,9 @@ export class MailConsumer extends WorkerHost {
                 subject: job.data.subject,
                 text: job.data.message,
             });
-            console.log(`Mail sent to ${job.data.email}`);
+            this.loggerService.log(`Mail sent to ${job.data.email}`);
         } catch (error) {
-            console.log(error);
+            this.loggerService.error(`Error sending mail to ${job.data.email}`, error.stack);
         }
 
         return {};
