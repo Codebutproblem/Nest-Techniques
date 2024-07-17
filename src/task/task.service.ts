@@ -21,7 +21,7 @@ export class TaskService {
         this.logger.debug('Kiểm tra hệ thống mỗi 12 giờ');
     }
 
-    @Cron('* * 0 * * *', {
+    @Cron('30 * * * * *', {
         name: 'notifications',
         timeZone: 'Europe/Paris',
     })
