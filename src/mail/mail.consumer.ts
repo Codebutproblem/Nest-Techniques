@@ -28,7 +28,7 @@ export class MailConsumer extends WorkerHost {
             this.loggerService.error(`Error sending mail to ${job.data.email}`, error.stack);
         }
 
-        return {};
+        return {a: 1};
     }
 
     @OnQueueEvent('completed')
