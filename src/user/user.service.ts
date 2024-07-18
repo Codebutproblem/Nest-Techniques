@@ -4,17 +4,13 @@ import { UserDto } from './dto/user.dto';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { plainToInstance } from 'class-transformer';
-import { LoggerService } from 'src/logger/logger.service';
 
 @Injectable()
 export class UserService {
     filePath = 'src/user/users.json';
     constructor(
-        @Inject(CACHE_MANAGER) private cacheManager: Cache,
-        private readonly loggerService: LoggerService
-    ) {
-        loggerService.setContext(UserService.name);
-    }
+        @Inject(CACHE_MANAGER) private cacheManager: Cache
+    ) {}
     
     async findAll(): Promise<UserDto[]> {
         // Giả sử đang lấy data từ csdl mất 1.5s
@@ -22,7 +18,6 @@ export class UserService {
             setTimeout(() => {
                 const data = fs.readFileSync(this.filePath, 'utf8');
                 const users = JSON.parse(data);
-                this.loggerService.log('Get all users successfully');
                 resolve(users);
             }, 1500);
         });
@@ -32,7 +27,6 @@ export class UserService {
         const data = fs.readFileSync(this.filePath, 'utf8');
         const users = JSON.parse(data);
         const user = users.find((user: UserDto) => user.id === id);
-        this.loggerService.log(`Get user with id ${id} successfully`);
         return plainToInstance(UserDto, user);
     }
 }
